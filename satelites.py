@@ -1,41 +1,32 @@
 from sgp4.api import Satrec
-
-s = '1 25544U 98067A   19343.69339541  .00001764  00000-0  38792-4 0  9991'
-t = '2 25544  51.6439 211.2001 0007417  17.6667  85.6398 15.50103472202482'
-satellite = Satrec.twoline2rv(s, t)
-#print(satellite)
-jd, fr = 2458827, 0.362605
-e, r, v = satellite.sgp4(jd, fr) 
-#print(e)
-
-print(r)# True Equator Mean Equinox position (km)
-print(v)# True Equator Mean Equinox velocity (km/s)
-
-
-
-import urllib3
-http = urllib3.PoolManager()
-r = http.request('GET', 'https://celestrak.com/NORAD/elements/2019-006.txt')
-data = r.data.decode('utf-8')
-p = data.split('\n')
-p.remove(p[len(p)-1])
-#print(p[0])
-#print(p[1])
-#print(p[2])
-
-s = p[1]
-t = p[2]
-satellite = Satrec.twoline2rv(s, t)
-#print(satellite)
-jd, fr = 2458827, 0.362605
-e, r, v = satellite.sgp4(jd, fr) 
-#print(e)
-#print(p[0])
-#print(r)# True Equator Mean Equinox position (km)
-#print(v)# True Equator Mean Equinox velocity (km/s)
-from sgp4.api import SGP4_ERRORS
-
 from sgp4.api import jday
-#jd, fr = jday(2021, 9, 28, 12, 52, 0)
-#print(jd, fr)
+from datetime import datetime
 
+
+#CONSTS
+EARTH_EQUATORIAL_RADIUS = 6378.135  # equatorial radius
+EARTH_FLATTENING_CONSTANT = 1 / 298.26
+GEO_SYNC_RADIUS = 42164.57
+class Derbis(object):
+    def __init__(self,s,t):
+        self.t=t
+        self.s=s
+        self.satellite = Satrec.twoline2rv(s, t)
+    
+    def propagar(self):
+        #get actual date
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        now = now.split()
+        #separar la fecha y la hora
+        year,month,day=now[0].split('-')
+        hour,minute,seconds=now[1].split(':')
+        #get jd and fr from jday funcation
+        self.jd, self.fr = jday(int(year),int(month),int(day),int(hour),int(minute),int(seconds))
+        
+        #get position and velocity based on jd and fr
+        e, self.position, self.velocity = self.satellite.sgp4(self.jd, self.fr)
+        
+        return self.position,self.velocity
+
+d = Derbis('1 24946U 97051C   21274.45158536  .00000109  00000-0  32175-4 0  9992','2 24946  86.3924 350.7298 0008414 161.7940 198.3558 14.33750944258574')
+print(*d.propagar())
