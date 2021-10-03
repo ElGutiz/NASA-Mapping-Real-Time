@@ -19,6 +19,27 @@ EARTH_FLATTENING_CONSTANT = 1 / 298.26
 GEO_SYNC_RADIUS = 42164.57
 EARTH_MU=5.972e24 * G
 
+fig = plt.figure()
+ax = p3.Axes3D(fig)
+anim = []
+trayectory = []
+
+
+# Hide grid lines
+ax.grid(False)
+
+def animate(i):
+    d.propagar()
+    pos = d.get_trayectory()
+    poss = pos[-1:]
+    posss = pos[-1]
+    trayectory.append(posss.tolist())
+    trayectory_f = np.asarray(trayectory)
+    ax.clear()
+    ax.plot([0], [0], [0], 'bo', markersize=9, label="Earth")
+    ax.plot(poss[::, 0], poss[::, 1], poss[::, 2], 'ro')
+    ax.plot(trayectory_f[::, 0], trayectory_f[::, 1], trayectory_f[::, 2], 'k-')    
+
 class Derbis(object):
     def __init__(self,s,t):
         self.t=t
@@ -85,4 +106,8 @@ class Derbis(object):
 
 d = Derbis('1 24946U 97051C   21274.45158536  .00000109  00000-0  32175-4 0  9992','2 24946  86.3924 350.7298 0008414 161.7940 198.3558 14.33750944258574')
 print(*d.propagar())
-print(d.get_trayectory())
+
+anim = animation.FuncAnimation(fig, animate, interval=100) 
+
+plt.show()
+
