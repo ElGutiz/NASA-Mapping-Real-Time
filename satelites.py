@@ -24,6 +24,8 @@ class Derbis(object):
         self.t=t
         self.s=s
         self.satellite = Satrec.twoline2rv(s, t)
+        self.propagar
+        self.get_trayectory
     
     def propagar(self):
         #get actual date
