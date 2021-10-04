@@ -35,9 +35,7 @@ sat_menu.place(x=100, y=250, width=100)
 def get_grafica(name):
     
     info = rf.ReadFile(name + ".txt")
-    debris=[]
-    for line in info:
-        debris.append(Debris(*line))
+    
 tk.Button(window,command=lambda: get_grafica(satelite.get()), text = "Map", width=10, bg='#25387d', fg='white').place(x=110,y=300)
 
 window.mainloop()

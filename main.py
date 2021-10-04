@@ -5,21 +5,21 @@ from sgp4.api import jday
 from datetime import datetime
 from scipy.integrate import ode
 import numpy as np
-
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import mpl_toolkits.mplot3d.axes3d as p3
+import ReadingFile as rf
 
+#CONSTS
 # gravitational constant
 G_meters = 6.67430e-11       # m**3 / kg / s**2
-G        = G_meters * 10**-9 # km**3/ kg / s**2
-#CONSTS
+G = G_meters * 10**-9 # km**3/ kg / s**2
 EARTH_EQUATORIAL_RADIUS = 6378.135  # equatorial radius
 EARTH_FLATTENING_CONSTANT = 1 / 298.26
 GEO_SYNC_RADIUS = 42164.57
 EARTH_MU=5.972e24 * G
 
-
+#plot grafica
 plt.style.use('dark_background')
 fig = plt.figure()
 fig.set_facecolor('black')
@@ -117,25 +117,56 @@ class Debris(object):
         #ax.plot(self.pos[::, 0], self.pos[::, 1], self.pos[::, 2], 'ro')
         ax.plot(self.trayectory_f[::, 0], self.trayectory_f[::, 1], self.trayectory_f[::, 2], 'w--')
         
-        
-#de aqui
-import ReadingFile as rf
-info = rf.ReadFile('IRIDIUM33.txt')
-#debris=[]
-#for line in info: debris.append(Debris(*line))
-#for i in range(0, 15):anim.append(animation.FuncAnimation(fig, debris[i].animate, interval=1000))
-#ah aqui son pruebas
-
-#plt.axis('off')
-#plt.show()
-
 def graficar(info):
     debris=[]
+    anim=[]
     for line in info: 
         debris.append(Debris(*line))
     for i in range(0, 15):
         anim.append(animation.FuncAnimation(fig, debris[i].animate, interval=1000))
     plt.axis('off')
     plt.show()
+    ax.clear()
+    
+    
+#gui
+import tkinter as tk
+from PIL import ImageTk, Image
 
-#graficar(info)
+
+window = tk.Tk()
+window.geometry("300x400")
+window.resizable(0,0)
+window.title("Mapping Space Trash in Real Time")
+#ico = tk.PhotoImage(file = 'sat.png')
+#window.iconphoto(False, ico)
+
+#satimg = Image.open("sat.png")
+#test = ImageTk.PhotoImage(satimg)
+#lab1 = tk.Label(image=test)
+#lab1.image = test
+#lab1.place(x=100, y= 45)
+
+lab2 = tk.Label(window, text='Select the debris you want to map').place(x=60, y=210)
+
+satelites = [
+    "COSMOS", 
+    "FENGYUN", 
+    "IRIDIUM33", 
+    "MICROSAT"
+    ]
+
+satelite = tk.StringVar(window)
+satelite.set(satelites[0])
+sat_menu = tk.OptionMenu(window, satelite, *satelites)
+sat_menu.place(x=100, y=250, width=100)
+
+
+def get_grafica(name):
+    
+    info = rf.ReadFile(name + ".txt")
+    graficar(info)
+    
+tk.Button(window,command=lambda: get_grafica(satelite.get()), text = "Map", width=10, bg='#25387d', fg='white').place(x=110,y=300)
+
+window.mainloop()
