@@ -75,7 +75,7 @@ We have used [Git](https://git-scm.com/) for version management with Git Bash. T
 ## Thanks to 🎁
 
 * NASA for giving us this amazing oportunity 📢🚀
-* Universidad del Valle De Guatemala for giving us the knowledge and the opportunities 🤓. 
+* Maria Zaghi & Universidad del Valle De Guatemala for giving us the knowledge and the opportunities 🤓. 
 * Python.es team for the amazing teamwork 👨‍💻.
 
 ---
