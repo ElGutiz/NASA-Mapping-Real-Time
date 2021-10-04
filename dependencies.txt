@@ -4,3 +4,5 @@ numpy
 matplotlib
 PyAstronomy
 scipy
+pillow
+tkcalendar
