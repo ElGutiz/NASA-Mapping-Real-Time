@@ -136,14 +136,14 @@ window = tk.Tk()
 window.geometry("300x400")
 window.resizable(0,0)
 window.title("Mapping Space Trash in Real Time")
-#ico = tk.PhotoImage(file = 'sat.png')
-#window.iconphoto(False, ico)
+ico = tk.PhotoImage(file = 'sat.png')
+window.iconphoto(False, ico)
 
-#satimg = Image.open("sat.png")
-#test = ImageTk.PhotoImage(satimg)
-#lab1 = tk.Label(image=test)
-#lab1.image = test
-#lab1.place(x=100, y= 45)
+satimg = Image.open("sat.png")
+test = ImageTk.PhotoImage(satimg)
+lab1 = tk.Label(image=test)
+lab1.image = test
+lab1.place(x=100, y= 45)
 
 lab2 = tk.Label(window, text='Select the debris you want to map').place(x=60, y=210)
 
