@@ -22,7 +22,7 @@ _Install a version manager:_
 * [GitHub Desktop](https://desktop.github.com/) - GUI GitHub Desktop
 * [GitKraken](https://desktop.github.com/) - GUI GitKraken
 
-_Clone the repo with the followind command:_
+_Clone the repo with the following command:_
 
 ```
 git clone https://github.com/ElGutiz/NASA-Mapping-Real-Time
