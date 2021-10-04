@@ -1,9 +1,9 @@
 # NASA-Mapping-Real-Time
-npm install
+pip install -r dependencies.txt
 ```
 
-_Si esta instalación es creada en una carpeta donde ya existia la carpeta **node modules** es conveniente eliminarla antes de ejecutar estos comandos ya que puede existir errores en la instalación_
-_Si esta instalación es creada en una carpeta donde ya existia la carpeta **node_modules** es conveniente eliminarla antes de ejecutar estos comandos ya que puede existir errores en la instalación_
+_From Guatemala to the world.
+_Reaching challenges above the sky
 
 
 ## Despliegue o Ejecucion 📦
