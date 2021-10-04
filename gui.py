@@ -1,5 +1,8 @@
 import tkinter as tk
 from PIL import ImageTk, Image
+#import reading files for tle
+import ReadingFile as rf
+from satelites import Debris
 
 window = tk.Tk()
 window.geometry("300x400")
@@ -28,6 +31,13 @@ satelite.set(satelites[0])
 sat_menu = tk.OptionMenu(window, satelite, *satelites)
 sat_menu.place(x=100, y=250, width=100)
 
-tk.Button(window, text = "Map", width=10, bg='#25387d', fg='white').place(x=110,y=300)
+
+def get_grafica(name):
+    
+    info = rf.ReadFile(name + ".txt")
+    debris=[]
+    for line in info:
+        debris.append(Debris(*line))
+tk.Button(window,command=lambda: get_grafica(satelite.get()), text = "Map", width=10, bg='#25387d', fg='white').place(x=110,y=300)
 
 window.mainloop()

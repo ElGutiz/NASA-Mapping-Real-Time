@@ -19,6 +19,7 @@ EARTH_FLATTENING_CONSTANT = 1 / 298.26
 GEO_SYNC_RADIUS = 42164.57
 EARTH_MU=5.972e24 * G
 
+
 plt.style.use('dark_background')
 fig = plt.figure()
 fig.set_facecolor('black')
@@ -26,31 +27,26 @@ ax = p3.Axes3D(fig)
 ax.w_xaxis.pane.fill = False
 ax.w_yaxis.pane.fill = False
 ax.w_zaxis.pane.fill = False
+#ax.set_visible(False)
+
+ax.grid(False)
+
+# Hide axes ticks
+ax.set_xticks([])
+ax.set_yticks([])
+ax.set_zticks([])
 
 anim = []
 trayectory = []
 
-def animate(i):
-    d.propagar()
-    pos = d.get_trayectory()
-    pos = pos[-1:]
-    
-    last_pos = pos[-1]
-    trayectory.append(last_pos.tolist())
-    trayectory_f = np.asarray(trayectory)
-    
-    ax.clear()
-    ax.plot([0], [0], [0], 'bo', markersize=9, label="Earth")
-    ax.plot(pos[::, 0], pos[::, 1], pos[::, 2], 'ro')
-    ax.plot(trayectory_f[::, 0], trayectory_f[::, 1], trayectory_f[::, 2], 'w--')    
-
-class Derbis(object):
+class Debris(object):
     def __init__(self,s,t):
         self.t=t
         self.s=s
         self.satellite = Satrec.twoline2rv(s, t)
         self.propagar
         self.get_trayectory
+        self.trayectory=[]
     
     def propagar(self):
         #get actual date
@@ -92,7 +88,7 @@ class Derbis(object):
         step=1
 
         #solver
-        solver=ode(d.two_body)
+        solver=ode(self.two_body)
         solver.set_integrator('lsoda')
         solver.set_initial_value(y0,0)
         solver.set_f_params(mu)
@@ -107,11 +103,29 @@ class Derbis(object):
         self.rs=ys[:,:3]
 
         return self.rs
-
-d = Derbis('1 24946U 97051C   21274.45158536  .00000109  00000-0  32175-4 0  9992','2 24946  86.3924 350.7298 0008414 161.7940 198.3558 14.33750944258574')
-print(*d.propagar())
-
-anim = animation.FuncAnimation(fig, animate, interval=1000) 
-
+    def animate(self,i):
+        self.propagar()
+        self.pos = self.get_trayectory()
+        self.pos = self.pos[-1:]
+        
+        self.last_pos = self.pos[-1]
+        self.trayectory.append(self.last_pos.tolist())
+        self.trayectory_f = np.asarray(self.trayectory)
+        
+        #ax.clear()
+        ax.plot([0], [0], [0], 'bo', markersize=9, label="Earth")
+        #ax.plot(self.pos[::, 0], self.pos[::, 1], self.pos[::, 2], 'ro')
+        ax.plot(self.trayectory_f[::, 0], self.trayectory_f[::, 1], self.trayectory_f[::, 2], 'w--')
+        
+        
+#de aqui
+import ReadingFile as rf
+info = rf.ReadFile('IRIDIUM33.txt')
+debris=[]
+for line in info: 
+    debris.append(Debris(*line))
+for i in range(0, 15):
+    anim.append(animation.FuncAnimation(fig, debris[i].animate, interval=1000))
+#ah aqui son pruebas
+plt.axis('off')
 plt.show()
-
