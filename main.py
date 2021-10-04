@@ -19,26 +19,6 @@ EARTH_FLATTENING_CONSTANT = 1 / 298.26
 GEO_SYNC_RADIUS = 42164.57
 EARTH_MU=5.972e24 * G
 
-#plot grafica
-plt.style.use('dark_background')
-fig = plt.figure()
-fig.set_facecolor('black')
-ax = p3.Axes3D(fig)
-ax.w_xaxis.pane.fill = False
-ax.w_yaxis.pane.fill = False
-ax.w_zaxis.pane.fill = False
-#ax.set_visible(False)
-
-ax.grid(False)
-
-# Hide axes ticks
-ax.set_xticks([])
-ax.set_yticks([])
-ax.set_zticks([])
-
-anim = []
-trayectory = []
-
 class Debris(object):
     def __init__(self,s,t):
         self.t=t
@@ -118,16 +98,34 @@ class Debris(object):
         ax.plot(self.trayectory_f[::, 0], self.trayectory_f[::, 1], self.trayectory_f[::, 2], 'w--')
         
 def graficar(info):
+    #plot grafica
+    plt.style.use('dark_background')
+    fig = plt.figure()
+    fig.set_facecolor('black')
+    global ax
+    ax = p3.Axes3D(fig)
+    ax.w_xaxis.pane.fill = False
+    ax.w_yaxis.pane.fill = False
+    ax.w_zaxis.pane.fill = False
+    #ax.set_visible(False)
+
+    ax.grid(False)
+
+    # Hide axes ticks
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_zticks([])
     debris=[]
     anim=[]
     for line in info: 
         debris.append(Debris(*line))
     for i in range(0, 15):
-        anim.append(animation.FuncAnimation(fig, debris[i].animate, interval=1000))
+        try:
+            anim.append(animation.FuncAnimation(fig, debris[i].animate, interval=1000))
+        except:
+            pass
     plt.axis('off')
-    plt.show()
-    ax.clear()
-    
+    plt.show()    
     
 #gui
 import tkinter as tk
